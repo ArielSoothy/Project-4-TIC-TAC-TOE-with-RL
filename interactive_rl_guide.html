@@ -24,10 +24,119 @@
             letter-spacing: -0.01em;
         }
 
+        /* Navigation Styles */
+        .navbar {
+            background: rgba(30, 41, 59, 0.9);
+            backdrop-filter: blur(16px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #94a3b8;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-link:hover {
+            color: #3b82f6;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .bar {
+            width: 25px;
+            height: 3px;
+            background: #94a3b8;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 60px;
+                flex-direction: column;
+                background: rgba(30, 41, 59, 0.95);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: 0 10px 27px rgba(0, 0, 0, 0.3);
+                backdrop-filter: blur(16px);
+                border-top: 1px solid rgba(148, 163, 184, 0.1);
+                padding: 20px 0;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .nav-menu li {
+                margin: 10px 0;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .hamburger.active .bar:nth-child(2) {
+                opacity: 0;
+            }
+
+            .hamburger.active .bar:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+
+            .hamburger.active .bar:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 80px 20px 20px 20px; /* Added top padding for fixed navbar */
         }
 
         .header {
@@ -491,6 +600,34 @@
     </style>
 </head>
 <body>
+    <!-- Navigation Menu -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="emoji">🎯</span>
+                <span>AI Tic-Tac-Toe</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#introduction" class="nav-link">Introduction</a></li>
+                <li><a href="#ai-brains" class="nav-link">AI Methods</a></li>
+                <li><a href="#interactive" class="nav-link">Interactive Demo</a></li>
+                <li><a href="#results" class="nav-link">Results</a></li>
+                <li><a href="#playground" class="nav-link">Playground</a></li>
+                <li><a href="notebook-interactive-rl.html" class="nav-link" target="_blank">
+                    <span class="emoji">📚</span> Notebook
+                </a></li>
+                <li><a href="https://github.com/ArielSoothy/Project-4-TIC-TAC-TOE-with-RL" class="nav-link" target="_blank">
+                    <span class="emoji">🔗</span> GitHub
+                </a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
     <div class="container">
         <header class="header">
             <h1>🎯 Learn AI Through Tic-Tac-Toe</h1>
@@ -498,7 +635,7 @@
         </header>
 
         <!-- Introduction Section -->
-        <section class="section animate-in">
+        <section id="introduction" class="section animate-in">
             <h2><span class="emoji">🚀</span>Welcome to AI Adventure!</h2>
             <p>Ever wondered how computers learn to play games? Let's discover the magic of <strong>Artificial Intelligence</strong> through the simple game of Tic-Tac-Toe!</p>
             
@@ -526,7 +663,7 @@
         </section>
 
         <!-- What is AI Section -->
-        <section class="section animate-in">
+        <section id="ai-brains" class="section animate-in">
             <h2><span class="emoji">🧠</span>What is Artificial Intelligence?</h2>
             
             <div class="definition">
@@ -588,7 +725,7 @@
         </section>
 
         <!-- Method Details with Tabs -->
-        <section class="section animate-in">
+        <section id="interactive" class="section animate-in">
             <h2><span class="emoji">🔍</span>How Each AI Learns</h2>
             
             <div class="tabs">
@@ -715,7 +852,7 @@
         </section>
 
         <!-- Experimental Results -->
-        <section class="section animate-in">
+        <section id="results" class="section animate-in">
             <h2><span class="emoji">🧪</span>Our Experiments & Results</h2>
             <p>We didn't just build these AIs - we tested them scientifically! Here's what we discovered:</p>
 
@@ -807,7 +944,7 @@
         </section>
 
         <!-- Interactive Learning Playground -->
-        <section class="section animate-in">
+        <section id="playground" class="section animate-in">
             <h2><span class="emoji">🎮</span>Interactive Learning Playground</h2>
             
             <div class="tabs">
@@ -909,28 +1046,6 @@
             </div>
         </section>
 
-        <!-- Call to Action -->
-        <section class="section animate-in">
-            <h2><span class="emoji">🚀</span>What's Next?</h2>
-            <p>Congratulations! You now understand the basics of reinforcement learning and how different AI methods compare!</p>
-            
-            <div class="highlight">
-                <strong>🎓 You've Learned:</strong><br>
-                ✅ What AI and reinforcement learning are<br>
-                ✅ How three different AI methods work<br>
-                ✅ Why parameter tuning is crucial<br>
-                ✅ That simple isn't always worse<br>
-                ✅ How to compare AI methods scientifically
-            </div>
-
-            <div class="interactive-demo">
-                <h3>Ready for More?</h3>
-                <p>Dive deeper into the technical details or explore more AI projects!</p>
-                <button class="btn" onclick="window.open('notebook-interactive-rl.html', '_blank')">📚 Deep Dive Notebook</button>
-                <button class="btn" onclick="window.open('https://github.com/topics/reinforcement-learning', '_blank')">🔍 Explore More AI Projects</button>
-                <button class="btn" onclick="window.open('https://gym.openai.com/', '_blank')">🎮 Try OpenAI Gym</button>
-            </div>
-        </section>
     </div>
 
     <script>
@@ -1172,6 +1287,21 @@
 
         // Add click event listeners to tic-tac-toe cells
         cells.forEach(cell => cell.addEventListener('click', handleCellClick));
+
+        // Mobile menu functionality
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Close mobile menu when a link is clicked
+        document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+        }));
 
         // Animation on scroll
         const observerOptions = {
