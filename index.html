@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 AI Learns Tic-Tac-Toe | Educational Experience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Display', system-ui, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            color: #1a202c;
+            overflow-x: hidden;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+        }
+
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 4.5em;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 35%, #4a5568 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+        }
+
+        .hero p {
+            font-size: 1.25em;
+            margin-bottom: 48px;
+            opacity: 0.85;
+            max-width: 680px;
+            line-height: 1.65;
+            font-weight: 400;
+            color: #4a5568;
+        }
+
+        .learning-paths {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .path-card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px 32px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .path-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border-color: #cbd5e0;
+        }
+
+        .path-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .path-card:hover::before {
+            left: 100%;
+        }
+
+        .path-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .path-card h3 {
+            font-size: 1.65em;
+            margin-bottom: 16px;
+            color: #1a202c;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        .path-card p {
+            font-size: 1.05em;
+            line-height: 1.6;
+            margin-bottom: 28px;
+            color: #4a5568;
+            font-weight: 400;
+        }
+
+        .features {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .features li {
+            margin: 8px 0;
+            padding-left: 20px;
+            position: relative;
+            color: #4a5568;
+        }
+
+        .features li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .cta-button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 1.02em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: -0.01em;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4);
+            background: #2563eb;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 60px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+            margin: 20px;
+        }
+
+        .stat-number {
+            font-size: 3.2em;
+            font-weight: 700;
+            color: #1a202c;
+            display: block;
+            letter-spacing: -0.02em;
+        }
+
+        .stat-label {
+            font-size: 1.1em;
+            color: #4a5568;
+            font-weight: 400;
+        }
+
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .floating-element {
+            position: absolute;
+            font-size: 2em;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .floating-element:nth-child(1) { top: 10%; left: 10%; animation-delay: 0s; }
+        .floating-element:nth-child(2) { top: 20%; right: 10%; animation-delay: 1s; }
+        .floating-element:nth-child(3) { bottom: 30%; left: 15%; animation-delay: 2s; }
+        .floating-element:nth-child(4) { bottom: 20%; right: 20%; animation-delay: 3s; }
+        .floating-element:nth-child(5) { top: 50%; left: 5%; animation-delay: 4s; }
+        .floating-element:nth-child(6) { top: 60%; right: 5%; animation-delay: 5s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .tech-stack {
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .tech-stack h3 {
+            margin-bottom: 24px;
+            color: #1a202c;
+            font-weight: 600;
+            font-size: 1.4em;
+        }
+
+        .tech-badges {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .tech-badge {
+            background: #f7fafc;
+            color: #2d3748;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 0.9em;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-weight: 500;
+        }
+
+        .tech-badge:hover {
+            background: #edf2f7;
+            border-color: #cbd5e0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5em; }
+            .hero p { font-size: 1.2em; }
+            .learning-paths { grid-template-columns: 1fr; }
+            .stats { flex-direction: column; }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2em;
+            animation: bounce 2s infinite;
+            color: #4a5568;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <div class="floating-elements">
+            <div class="floating-element">🎯</div>
+            <div class="floating-element">🧠</div>
+            <div class="floating-element">⚡</div>
+            <div class="floating-element">🎮</div>
+            <div class="floating-element">🏆</div>
+            <div class="floating-element">🎲</div>
+        </div>
+
+        <h1>🎯 AI Learns Tic-Tac-Toe</h1>
+        <p>
+            Discover how three different AI "brains" learned to master the classic game of Tic-Tac-Toe. 
+            From patient scholars to quick learners to neural networks - explore the fascinating 
+            world of Reinforcement Learning through interactive experiences!
+        </p>
+
+        <div class="stats">
+            <div class="stat">
+                <span class="stat-number">94%</span>
+                <span class="stat-label">Best Win Rate</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">3</span>
+                <span class="stat-label">AI Methods</span>
+            </div>
+            <div class="stat">
+                <span class="stat-number">100%</span>
+                <span class="stat-label">Interactive</span>
+            </div>
+        </div>
+
+        <div class="learning-paths">
+            <div class="path-card">
+                <span class="path-icon">🚀</span>
+                <h3>Quick Start Guide</h3>
+                <p>Perfect for beginners! Learn AI concepts through simple explanations, interactive games, and fun analogies.</p>
+                <ul class="features">
+                    <li>Play Tic-Tac-Toe against AI</li>
+                    <li>Simple explanations with analogies</li>
+                    <li>Interactive quiz and simulator</li>
+                    <li>Visual comparisons of all methods</li>
+                    <li>Complete glossary of terms</li>
+                </ul>
+                <a href="interactive_rl_guide.html" class="cta-button">🎮 Start Learning</a>
+            </div>
+
+            <div class="path-card">
+                <span class="path-icon">📚</span>
+                <h3>Deep Dive Notebook</h3>
+                <p>For the technically curious! Explore detailed experiments, code implementations, and scientific analysis.</p>
+                <ul class="features">
+                    <li>Step-by-step code explanations</li>
+                    <li>Parameter tuning experiments</li>
+                    <li>Detailed performance analysis</li>
+                    <li>Scientific methodology</li>
+                    <li>Technical implementation details</li>
+                </ul>
+                <a href="notebook-interactive-rl.html" class="cta-button">🔬 Dive Deep</a>
+            </div>
+
+            <div class="path-card">
+                <span class="path-icon">📊</span>
+                <h3>Project Documentation</h3>
+                <p>Academic and professional documentation of our complete research, findings, and conclusions.</p>
+                <ul class="features">
+                    <li>Complete experimental results</li>
+                    <li>Academic-style analysis</li>
+                    <li>Methodology and conclusions</li>
+                    <li>Performance comparisons</li>
+                    <li>Technical implementation</li>
+                </ul>
+                <a href="Project4_Answers.md" class="cta-button">📋 View Results</a>
+            </div>
+        </div>
+
+        <div class="tech-stack">
+            <h3>🛠️ Technologies Used</h3>
+            <div class="tech-badges">
+                <span class="tech-badge">Python</span>
+                <span class="tech-badge">NumPy</span>
+                <span class="tech-badge">TensorFlow</span>
+                <span class="tech-badge">Matplotlib</span>
+                <span class="tech-badge">Reinforcement Learning</span>
+                <span class="tech-badge">Monte Carlo</span>
+                <span class="tech-badge">Q-Learning</span>
+                <span class="tech-badge">Deep Q-Networks</span>
+                <span class="tech-badge">Neural Networks</span>
+            </div>
+        </div>
+
+        <div class="scroll-indicator">⬇️</div>
+    </div>
+
+    <script>
+        // Add some interactive particles
+        document.addEventListener('mousemove', function(e) {
+            if (Math.random() > 0.95) {
+                createParticle(e.clientX, e.clientY);
+            }
+        });
+
+        function createParticle(x, y) {
+            const particle = document.createElement('div');
+            particle.style.position = 'fixed';
+            particle.style.left = x + 'px';
+            particle.style.top = y + 'px';
+            particle.style.width = '4px';
+            particle.style.height = '4px';
+            particle.style.background = '#3b82f6';
+            particle.style.borderRadius = '50%';
+            particle.style.pointerEvents = 'none';
+            particle.style.opacity = '0.7';
+            particle.style.zIndex = '1000';
+            
+            document.body.appendChild(particle);
+            
+            // Animate particle
+            let opacity = 0.7;
+            let size = 4;
+            const interval = setInterval(() => {
+                opacity -= 0.05;
+                size += 0.5;
+                particle.style.opacity = opacity;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                particle.style.marginLeft = -(size/2) + 'px';
+                particle.style.marginTop = -(size/2) + 'px';
+                
+                if (opacity <= 0) {
+                    clearInterval(interval);
+                    document.body.removeChild(particle);
+                }
+            }, 50);
+        }
+
+        // Add click effects to cards
+        document.querySelectorAll('.path-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Create ripple effect
+                const ripple = document.createElement('div');
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                ripple.style.position = 'absolute';
+                ripple.style.left = x + 'px';
+                ripple.style.top = y + 'px';
+                ripple.style.width = '0px';
+                ripple.style.height = '0px';
+                ripple.style.background = 'rgba(59, 130, 246, 0.3)';
+                ripple.style.borderRadius = '50%';
+                ripple.style.transform = 'translate(-50%, -50%)';
+                ripple.style.pointerEvents = 'none';
+                
+                card.appendChild(ripple);
+                
+                // Animate ripple
+                setTimeout(() => {
+                    ripple.style.width = '200px';
+                    ripple.style.height = '200px';
+                    ripple.style.opacity = '0';
+                    ripple.style.transition = 'all 0.6s ease';
+                }, 10);
+                
+                setTimeout(() => {
+                    if (ripple.parentNode) {
+                        ripple.parentNode.removeChild(ripple);
+                    }
+                }, 600);
+            });
+        });
+    </script>
+</body>
+</html> 

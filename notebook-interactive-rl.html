@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎯 RL Project 4 - Interactive Learning Journey</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Display', system-ui, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            font-weight: 400;
+            letter-spacing: -0.01em;
+        }
+
+        .notebook-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .project-header {
+            text-align: center;
+            color: #f1f5f9;
+            margin-bottom: 40px;
+        }
+
+        .project-header h1 {
+            font-size: 3.2em;
+            margin: 0;
+            background: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 35%, #e2e8f0 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+        }
+
+        .project-header p {
+            font-size: 1.2em;
+            margin: 10px 0;
+            color: #94a3b8;
+        }
+
+        .nav-pills {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-pill {
+            background: rgba(30, 41, 59, 0.6);
+            color: #94a3b8;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(148, 163, 184, 0.2);
+            font-weight: 500;
+            backdrop-filter: blur(8px);
+        }
+
+        .nav-pill:hover {
+            background: rgba(30, 41, 59, 0.8);
+            transform: translateY(-2px);
+            border-color: rgba(59, 130, 246, 0.3);
+            color: #cbd5e1;
+        }
+
+        .nav-pill.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .notebook-cell {
+            background: rgba(30, 41, 59, 0.6);
+            margin: 24px 0;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(16px);
+        }
+
+        .notebook-cell:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+
+        .cell-header {
+            background: #3b82f6;
+            color: white;
+            padding: 15px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .cell-header:hover {
+            background: #2563eb;
+        }
+
+        .cell-header i {
+            transition: transform 0.3s ease;
+        }
+
+        .cell-header.expanded i {
+            transform: rotate(180deg);
+        }
+
+        .cell-content {
+            padding: 20px;
+            display: none;
+            animation: slideDown 0.3s ease;
+            color: #f1f5f9;
+        }
+
+        .cell-content.active {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-number {
+            background: linear-gradient(45deg, #ef4444, #dc2626);
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .code-block {
+            background: #0f172a;
+            color: #e2e8f0;
+            border-radius: 12px;
+            margin: 20px 0;
+            overflow: hidden;
+            font-family: 'Fira Code', 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+        }
+
+        .code-header {
+            background: #1e293b;
+            color: white;
+            padding: 10px 15px;
+            font-size: 0.9em;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .code-content {
+            padding: 20px;
+            overflow-x: auto;
+            line-height: 1.7;
+        }
+
+        .code-content pre {
+            margin: 0;
+            padding: 0;
+            background: none;
+            border: none;
+            font-size: 0.95em;
+        }
+
+        .keyword { color: #ff6b6b; font-weight: 600; }
+        .string { color: #68d391; }
+        .comment { color: #94a3b8; font-style: italic; }
+        .function { color: #63b3ed; }
+        .variable { color: #fbb6ce; }
+        .number { color: #f6ad55; }
+
+        .result-box {
+            background: rgba(59, 130, 246, 0.1);
+            color: #f1f5f9;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            backdrop-filter: blur(8px);
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .metric-card {
+            background: #3b82f6;
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4);
+        }
+
+        .metric-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 2em;
+        }
+
+        .simplified-explanation {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #3b82f6;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            color: #f1f5f9;
+            backdrop-filter: blur(8px);
+        }
+
+        .simplified-explanation h4 {
+            margin: 0 0 10px 0;
+            color: #f1f5f9;
+            font-weight: 600;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            backdrop-filter: blur(8px);
+        }
+
+        .comparison-table th {
+            background: #3b82f6;
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .comparison-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+            color: #f1f5f9;
+        }
+
+        .improvement {
+            color: #22c55e;
+            font-weight: bold;
+        }
+
+        .degradation {
+            color: #ef4444;
+            font-weight: bold;
+        }
+
+        .insight-box {
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            color: #f1f5f9;
+            backdrop-filter: blur(8px);
+        }
+
+        .glossary-term-box {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            margin: 10px 0;
+            transition: all 0.3s ease;
+            color: #f1f5f9;
+            backdrop-filter: blur(8px);
+        }
+
+        .glossary-term-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.3);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .glossary-term-box h5 {
+            margin: 0 0 8px 0;
+            color: #f1f5f9;
+            font-weight: 700;
+            font-size: 1.1em;
+            border-bottom: 2px solid #3b82f6;
+            padding-bottom: 5px;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .step {
+            background: #3b82f6;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9em;
+            position: relative;
+            margin: 5px;
+            border: none;
+        }
+
+        .step::after {
+            content: '→';
+            position: absolute;
+            right: -25px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #3b82f6;
+            font-weight: bold;
+        }
+
+        .step:last-child::after {
+            display: none;
+        }
+
+        .interactive-demo {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            color: #f1f5f9;
+            backdrop-filter: blur(8px);
+        }
+
+        .btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            letter-spacing: -0.01em;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4);
+            background: #2563eb;
+        }
+
+        @media (max-width: 768px) {
+            .nav-pills { flex-direction: column; }
+            .step-indicator { flex-direction: column; }
+            .step::after { display: none; }
+            .project-header h1 { font-size: 2em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="notebook-container">
+        <!-- Project Header -->
+        <div class="project-header">
+            <h1>🎯 RL Project 4: Interactive Journey</h1>
+            <p><strong>Topic:</strong> Mastering Tic-Tac-Toe with Three AI Brains</p>
+            <p>A Complete Learning Experience Through Reinforcement Learning</p>
+        </div>
+
+        <!-- Navigation Pills -->
+        <div class="nav-pills">
+            <div class="nav-pill active" onclick="showSection('monte-carlo-detailed')">
+                <i class="fas fa-dice"></i> Monte Carlo Deep Dive
+            </div>
+            <div class="nav-pill" onclick="showSection('q-learning-detailed')">
+                <i class="fas fa-table"></i> Q-Learning Experiments
+            </div>
+            <div class="nav-pill" onclick="showSection('dqn-detailed')">
+                <i class="fas fa-brain"></i> Deep Q-Networks
+            </div>
+            <div class="nav-pill" onclick="showSection('comparison')">
+                <i class="fas fa-chart-bar"></i> Final Comparison
+            </div>
+        </div>
+
+        <!-- MONTE CARLO DETAILED SECTION -->
+        <div id="monte-carlo-detailed" class="section active">
+            
+            <!-- Introduction Cell -->
+            <div class="notebook-cell">
+                <div class="cell-header" onclick="toggleCell(this)">
+                    <span><span class="question-number">1</span>🎓 Understanding Monte Carlo Learning</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="cell-content">
+                    <h3>🤔 What is Monte Carlo?</h3>
+                    <p>Monte Carlo methods learn from complete experiences. Think of it as a wise scholar who plays entire games, then reflects on what led to victory or defeat.</p>
+
+                    <div class="simplified-explanation">
+                        <h4>🎮 The Gaming Analogy</h4>
+                        <p><strong>Imagine learning chess:</strong> Instead of analyzing each move as you play, you play complete games and then think "Okay, I won - which moves throughout that entire game were probably good decisions?" Monte Carlo does exactly this!</p>
+                    </div>
+
+                    <div class="step-indicator">
+                        <div class="step">Play Complete Game</div>
+                        <div class="step">See Final Result</div>
+                        <div class="step">Credit/Blame All Moves</div>
+                        <div class="step">Update Knowledge</div>
+                    </div>
+
+                    <div class="glossary-term-box">
+                        <h5>📚 Key Concept: Episode-Based Learning</h5>
+                        <p><strong>Episode:</strong> One complete game from start to finish</p>
+                        <p><strong>Return:</strong> The final reward (+1 win, -1 loss, 0 tie)</p>
+                        <p><strong>Credit Assignment:</strong> Figuring out which moves deserve credit for the final outcome</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Parameter Experiments -->
+            <div class="notebook-cell">
+                <div class="cell-header" onclick="toggleCell(this)">
+                    <span><span class="question-number">2</span>🧪 Parameter Experiments & Discoveries</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="cell-content">
+                    <h3>🔬 Our Scientific Experiments</h3>
+                    <p>We tested 4 different parameters to find the optimal Monte Carlo configuration:</p>
+
+                    <div class="metric-grid">
+                        <div class="metric-card">
+                            <h3>Learning Rate</h3>
+                            <p>How fast the AI learns from experience</p>
+                        </div>
+                        <div class="metric-card">
+                            <h3>Epsilon (ε)</h3>
+                            <p>How much the AI explores vs exploits</p>
+                        </div>
+                        <div class="metric-card">
+                            <h3>Discount Factor</h3>
+                            <p>How much future rewards matter</p>
+                        </div>
+                        <div class="metric-card">
+                            <h3>Episodes</h3>
+                            <p>How much training to give the AI</p>
+                        </div>
+                    </div>
+
+                    <h3>📊 Experiment Results:</h3>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Values Tested</th>
+                                <th>Best Value</th>
+                                <th>Win Rate</th>
+                                <th>Insight</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Learning Rate</strong></td>
+                                <td>0.0001 - 1.0</td>
+                                <td class="improvement">0.001</td>
+                                <td class="improvement">84%</td>
+                                <td>Stable learning sweet spot</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Epsilon</strong></td>
+                                <td>0.1 - 0.5</td>
+                                <td class="improvement">0.3</td>
+                                <td class="improvement">94%</td>
+                                <td>🚨 Surprising winner!</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Discount Factor</strong></td>
+                                <td>0.9 - 0.99</td>
+                                <td class="improvement">0.99</td>
+                                <td class="improvement">92%</td>
+                                <td>Think ahead pays off</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Episodes</strong></td>
+                                <td>5,000 - 50,000</td>
+                                <td class="improvement">20,000</td>
+                                <td class="improvement">78%</td>
+                                <td>More training = better</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="insight-box">
+                        <h4>🎉 The Breakthrough Discovery</h4>
+                        <p><strong>30% exploration (ε=0.3) achieved 94% win rate!</strong> This shocked us because conventional wisdom says 10% exploration is optimal. Sometimes being unpredictable is the best strategy!</p>
+                    </div>
+
+                    <div class="simplified-explanation">
+                        <h4>🤔 Why 30% Exploration Won</h4>
+                        <p><strong>Restaurant analogy:</strong> Imagine you're exploring a new city. Most tourists stick to guidebook recommendations (low exploration). But the adventurous travelers who try random local spots (30% exploration) often discover amazing hidden gems that cautious tourists miss! 🍜✨</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Code Implementation -->
+            <div class="notebook-cell">
+                <div class="cell-header" onclick="toggleCell(this)">
+                    <span><span class="question-number">3</span>💻 Monte Carlo Implementation</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="cell-content">
+                    <h3>🔧 How We Built It</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-code"></i> Monte Carlo Learning Algorithm</span>
+                        </div>
+                        <div class="code-content">
+                            <pre><code><span class="comment"># Monte Carlo Learning Function</span>
+<span class="keyword">def</span> <span class="function">monte_carlo_learning</span>(<span class="variable">episodes</span>=<span class="number">20000</span>, <span class="variable">epsilon</span>=<span class="number">0.3</span>, <span class="variable">alpha</span>=<span class="number">0.001</span>):
+    <span class="variable">Q</span> = {}  <span class="comment"># Q-table to store state-action values</span>
+    
+    <span class="keyword">for</span> <span class="variable">episode</span> <span class="keyword">in</span> <span class="function">range</span>(<span class="variable">episodes</span>):
+        <span class="comment"># Play complete game and record all states/actions</span>
+        <span class="variable">states</span>, <span class="variable">actions</span>, <span class="variable">rewards</span> = <span class="function">play_episode</span>(<span class="variable">epsilon</span>)
+        
+        <span class="comment"># Calculate returns for each state visited</span>
+        <span class="variable">G</span> = <span class="number">0</span>  <span class="comment"># Return (cumulative reward)</span>
+        
+        <span class="comment"># Work backwards through the episode</span>
+        <span class="keyword">for</span> <span class="variable">t</span> <span class="keyword">in</span> <span class="function">reversed</span>(<span class="function">range</span>(<span class="function">len</span>(<span class="variable">states</span>))):
+            <span class="variable">state</span> = <span class="variable">states</span>[<span class="variable">t</span>]
+            <span class="variable">action</span> = <span class="variable">actions</span>[<span class="variable">t</span>]
+            <span class="variable">reward</span> = <span class="variable">rewards</span>[<span class="variable">t</span>]
+            
+            <span class="comment"># Update return</span>
+            <span class="variable">G</span> = <span class="variable">reward</span> + <span class="number">0.99</span> * <span class="variable">G</span>  <span class="comment"># discount factor = 0.99</span>
+            
+            <span class="comment"># Update Q-value using our return</span>
+            <span class="keyword">if</span> (<span class="variable">state</span>, <span class="variable">action</span>) <span class="keyword">not in</span> <span class="variable">Q</span>:
+                <span class="variable">Q</span>[(<span class="variable">state</span>, <span class="variable">action</span>)] = <span class="number">0</span>
+            
+            <span class="variable">Q</span>[(<span class="variable">state</span>, <span class="variable">action</span>)] += <span class="variable">alpha</span> * (<span class="variable">G</span> - <span class="variable">Q</span>[(<span class="variable">state</span>, <span class="variable">action</span>)])
+    
+    <span class="keyword">return</span> <span class="variable">Q</span></code></pre>
+                        </div>
+                    </div>
+
+                    <div class="result-box">
+                        <h3>🎯 Champion Configuration Achieved:</h3>
+                        <ul>
+                            <li><strong>Learning Rate:</strong> 0.001 (steady, stable learning)</li>
+                            <li><strong>Exploration:</strong> 30% (the surprise winner!)</li>
+                            <li><strong>Discount Factor:</strong> 0.99 (values future rewards highly)</li>
+                            <li><strong>Training:</strong> 20,000 episodes</li>
+                            <li><strong>Final Result:</strong> 94% Win Rate! 🏆</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Q-LEARNING DETAILED SECTION -->
+        <div id="q-learning-detailed" class="section">
+            
+            <div class="notebook-cell">
+                <div class="cell-header" onclick="toggleCell(this)">
+                    <span><span class="question-number">4</span>⚡ Q-Learning: The Instant Learner</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="cell-content">
+                    <h3>🔥 What Makes Q-Learning Different?</h3>
+                    <p>Unlike Monte Carlo which waits for complete games, Q-Learning learns from every single move immediately!</p>
+
+                    <div class="simplified-explanation">
+                        <h4>🎮 The GPS Analogy</h4>
+                        <p><strong>Monte Carlo is like planning your entire road trip in advance.</strong> Q-Learning is like GPS that recalculates your route after every turn - "Hmm, traffic jam ahead, let me find a better path RIGHT NOW!" 🗺️</p>
+                    </div>
+
+                    <div class="step-indicator">
+                        <div class="step">Make Move</div>
+                        <div class="step">See Immediate Result</div>
+                        <div class="step">Update Q-Table</div>
+                        <div class="step">Next Move</div>
+                    </div>
+
+                    <h3>📊 Our Q-Learning Experiments:</h3>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Experiment</th>
+                                <th>Configuration</th>
+                                <th>Win Rate</th>
+                                <th>Loss Rate</th>
+                                <th>Tie Rate</th>
+                                <th>Key Finding</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Baseline</strong></td>
+                                <td>α=0.1, standard params</td>
+                                <td class="improvement">62.0%</td>
+                                <td>21.9%</td>
+                                <td>16.1%</td>
+                                <td>Good performance</td>
+                            </tr>
+                            <tr>
+                                <td><strong>High Exploration</strong></td>
+                                <td>ε=1.0 (pure exploration)</td>
+                                <td class="degradation">43.8%</td>
+                                <td>34.4%</td>
+                                <td>21.9%</td>
+                                <td>Too much randomness hurts</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Extended Training</strong></td>
+                                <td>50,000 episodes</td>
+                                <td class="degradation">37.2%</td>
+                                <td>36.9%</td>
+                                <td>25.9%</td>
+                                <td>⚠️ Overtraining degradation!</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Tie Penalty</strong></td>
+                                <td>Tie reward = -1</td>
+                                <td class="improvement">44.2%</td>
+                                <td>37.4%</td>
+                                <td class="improvement">18.5%</td>
+                                <td>Successfully reduced ties</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="insight-box">
+                        <h4>🚨 Shocking Discovery: More Training Made It Worse!</h4>
+                        <p>50,000 episodes gave us 37.2% win rate vs 62% with standard training. Q-Learning "overthought" and forgot its good strategies - sometimes more isn't better!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="notebook-cell">
+                <div class="cell-header" onclick="toggleCell(this)">
+                    <span><span class="question-number">5</span>🧮 The Q-Learning Update Formula</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="cell-content">
+                    <h3>🔢 The Magic Formula</h3>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span><i class="fas fa-calculator"></i> Q-Learning Update Rule</span>
+                        </div>
+                        <div class="code-content">
+                            <pre><code><span class="comment"># The famous Q-Learning formula:</span>
+<span class="variable">Q</span>[<span class="variable">state</span>, <span class="variable">action</span>] = <span class="variable">Q</span>[<span class="variable">state</span>, <span class="variable">action</span>] + <span class="variable">α</span> * (
+    <span class="variable">reward</span> + <span class="variable">γ</span> * <span class="function">max</span>(<span class="variable">Q</span>[<span class="variable">next_state</span>, :]) - <span class="variable">Q</span>[<span class="variable">state</span>, <span class="variable">action</span>]
+)
+
+<span class="comment"># Breaking it down:</span>
+<span class="comment"># α (alpha) = learning rate (how fast to learn)</span>
+<span class="comment"># γ (gamma) = discount factor (how much future matters)</span>
+<span class="comment"># reward = immediate reward from this action</span>
+<span class="comment"># max(Q[next_state, :]) = best future action value</span></code></pre>
+                        </div>
+                    </div>
+
+                    <div class="simplified-explanation">
+                        <h4>🤔 What This Formula Actually Does</h4>
+                        <p><strong>Imagine updating your restaurant ratings:</strong><br>
+                        Your new rating = Old rating + Learning × (Today's meal + Future potential - Old rating)<br><br>
+                        If you had pizza rated 7/10, but today's pizza was amazing (9/10) and the restaurant has great potential (8/10 average), you'd update your rating upward! 🍕📈</p>
+                    </div>
+
+                    <div class="glossary-term-box">
+                        <h5>🎯 Why Q-Learning is Powerful</h5>
+                        <p><strong>Immediate Learning:</strong> Updates knowledge after every move</p>
+                        <p><strong>Bootstrapping:</strong> Uses its own estimates to improve itself</p>
+                        <p><strong>Off-policy:</strong> Can learn optimal strategy while exploring</p>
+                        <p><strong>Challenge:</strong> Can be unstable - sometimes "forgets" good strategies</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DQN DETAILED SECTION -->
+        <div id="dqn-detailed" class="section">
+            
+            <div class="notebook-cell">
+                <div class="cell-header" onclick="toggleCell(this)">
+                    <span><span class="question-number">6</span>🧠 Deep Q-Networks: The Neural Brain</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="cell-content">
+                    <h3>🤖 What Makes DQN Special?</h3>
+                    <p>DQN combines Q-Learning with neural networks - instead of a simple table, it has a "brain" that can recognize complex patterns!</p>
+
+                    <div class="simplified-explanation">
+                        <h4>🧠 The Brain Analogy</h4>
+                        <p><strong>Q-Learning uses a dictionary:</strong> "In situation A, do action X = good"<br>
+                        <strong>DQN uses a neural brain:</strong> "Looking at this pattern of shapes and positions, my neurons fire and suggest the best move" - just like human intuition! 🎯</p>
+                    </div>
+
+                    <div class="step-indicator">
+                        <div class="step">See Board State</div>
+                        <div class="step">Neural Network Processing</div>
+                        <div class="step">Output Action Values</div>
+                        <div class="step">Choose Best Action</div>
+                    </div>
+
+                    <h3>🏗️ Our DQN Architecture:</h3>
+                    <div class="result-box">
+                        <h3>🔧 Network Structure</h3>
+                        <ul>
+                            <li><strong>Input Layer:</strong> 9 neurons (one per Tic-Tac-Toe square)</li>
+                            <li><strong>Hidden Layer 1:</strong> 64 neurons (pattern detection)</li>
+                            <li><strong>Hidden Layer 2:</strong> 32 neurons (strategy formation)</li>
+                            <li><strong>Hidden Layer 3:</strong> 16 neurons (decision refinement)</li>
+                            <li><strong>Output Layer:</strong> 9 neurons (action values for each square)</li>
+                        </ul>
+                    </div>
+
+                    <div class="metric-grid">
+                        <div class="metric-card">
+                            <h3>21:17</h3>
+                            <p>Training Time (minutes)</p>
+                        </div>
+                        <div class="metric-card">
+                            <h3>100</h3>
+                            <p>Episodes Trained</p>
+                        </div>
+                        <div class="metric-card">
+                            <h3>Strategic</h3>
+                            <p>Gameplay Quality</p>
+                        </div>
+                        <div class="metric-card">
+                            <h3>High</h3>
+                            <p>Scalability</p>
+                        </div>
+                    </div>
+
+                    <div class="insight-box">
+                        <h4>🚀 DQN's Superpower</h4>
+                        <p><strong>Scalability!</strong> While Monte Carlo and Q-Learning struggle with larger games, DQN can handle Chess, Go, or even video games with millions of possible states. It's like upgrading from a calculator to a supercomputer! 💻</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FINAL COMPARISON SECTION -->
+        <div id="comparison" class="section">
+            
+            <div class="notebook-cell">
+                <div class="cell-header" onclick="toggleCell(this)">
+                    <span><span class="question-number">7</span>🏆 The Final Championship Results</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="cell-content">
+                    <h3>🥇🥈🥉 And the Winner Is...</h3>
+                    
+                    <div class="metric-grid">
+                        <div class="metric-card" style="background: linear-gradient(135deg, #ffd700, #ffed4e);">
+                            <h3>🥇 CHAMPION</h3>
+                            <h2>Monte Carlo</h2>
+                            <p><strong>94% Win Rate</strong></p>
+                        </div>
+                        <div class="metric-card">
+                            <h3>🥈 Second Place</h3>
+                            <h2>Q-Learning</h2>
+                            <p><strong>62% Win Rate</strong></p>
+                        </div>
+                        <div class="metric-card">
+                            <h3>🥉 Strategic Play</h3>
+                            <h2>Deep Q-Network</h2>
+                            <p><strong>High Quality Games</strong></p>
+                        </div>
+                    </div>
+
+                    <h3>📊 Complete Performance Analysis:</h3>
+                    <table class="comparison-table">
+                        <thead>
+                            <tr>
+                                <th>Aspect</th>
+                                <th>Monte Carlo</th>
+                                <th>Q-Learning</th>
+                                <th>Deep Q-Network</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Win Rate</strong></td>
+                                <td class="improvement">94%</td>
+                                <td>62%</td>
+                                <td>Strategic Quality</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Training Time</strong></td>
+                                <td class="improvement">Seconds</td>
+                                <td class="improvement">Seconds</td>
+                                <td class="degradation">21+ minutes</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Stability</strong></td>
+                                <td class="improvement">Very Stable</td>
+                                <td class="degradation">Can degrade</td>
+                                <td class="improvement">Stable</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Scalability</strong></td>
+                                <td class="degradation">Limited</td>
+                                <td class="degradation">Limited</td>
+                                <td class="improvement">Excellent</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Best Use Case</strong></td>
+                                <td>Simple, discrete games</td>
+                                <td>Fast learning needed</td>
+                                <td>Complex, large games</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="insight-box">
+                        <h4>🎯 Key Takeaways from Our AI Olympics</h4>
+                        <p><strong>Parameter tuning is EVERYTHING:</strong> Settings changed win rates from 37% to 94%</p>
+                        <p><strong>Simple can beat complex:</strong> Monte Carlo outperformed neural networks</p>
+                        <p><strong>More training ≠ better:</strong> Q-Learning got worse with overtraining</p>
+                        <p><strong>Each method has its sweet spot:</strong> Choose the right tool for the job!</p>
+                    </div>
+
+                    <div class="simplified-explanation">
+                        <h4>🤔 Final Wisdom</h4>
+                        <p><strong>In the world of AI:</strong> Monte Carlo is like a wise master craftsman - patient, reliable, and excellent at their specialty. Q-Learning is like an eager apprentice - quick to learn but sometimes makes mistakes. DQN is like a brilliant engineer - can solve incredibly complex problems but might be overkill for simple tasks. Choose your AI champion wisely! 👑</p>
+                    </div>
+
+                    <div class="interactive-demo">
+                        <h3>🎉 Congratulations!</h3>
+                        <p>You've completed the entire Reinforcement Learning journey! You now understand:</p>
+                        <ul style="text-align: left; max-width: 500px; margin: 0 auto;">
+                            <li>✅ How Monte Carlo learns from complete experiences</li>
+                            <li>✅ How Q-Learning updates knowledge immediately</li>
+                            <li>✅ How neural networks can replace simple tables</li>
+                            <li>✅ Why parameter tuning is crucial</li>
+                            <li>✅ When to use each method</li>
+                        </ul>
+                        <button class="btn" onclick="window.open('interactive_rl_guide.html', '_blank')">🚀 Continue to Main Guide</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all nav pills
+            document.querySelectorAll('.nav-pill').forEach(pill => {
+                pill.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to clicked nav pill
+            event.target.classList.add('active');
+        }
+
+        function toggleCell(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('i');
+            
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                header.classList.remove('expanded');
+            } else {
+                content.classList.add('active');
+                header.classList.add('expanded');
+            }
+        }
+
+        // Initialize - expand first cell of each section
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.section').forEach(section => {
+                const firstCell = section.querySelector('.cell-header');
+                if (firstCell && section.classList.contains('active')) {
+                    toggleCell(firstCell);
+                }
+            });
+        });
+    </script>
+</body>
+</html> 
