@@ -715,6 +715,93 @@
             font-weight: 600;
         }
 
+        /* Grouped Vertical Bar Chart */
+        .grouped-bar-chart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .chart-grid {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            width: 100%;
+            height: 350px;
+            margin: 20px 0;
+            padding: 0 20px;
+        }
+
+        .bar-group-vertical {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            width: 120px;
+        }
+
+        .bar-group-vertical.breakthrough {
+            animation: pulse 2s infinite;
+        }
+
+        .bar-group-vertical.optimal {
+            transform: scale(1.05);
+        }
+
+        .bars-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            width: 100%;
+            height: 280px;
+            margin-bottom: 15px;
+        }
+
+        .bar-vertical {
+            width: 30px;
+            margin: 0 3px;
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            min-height: 20px;
+        }
+
+        .bar-vertical span {
+            color: white;
+            font-size: 0.75em;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            padding: 4px;
+            position: absolute;
+            bottom: 4px;
+            transform: rotate(-90deg);
+            transform-origin: center;
+            white-space: nowrap;
+        }
+
+        .bar-vertical:hover {
+            transform: scale(1.1);
+            z-index: 10;
+        }
+
+        .bar-vertical.win-bar {
+            background: linear-gradient(180deg, #22c55e, #16a34a);
+            border: 2px solid #15803d;
+        }
+
+        .bar-vertical.loss-bar {
+            background: linear-gradient(180deg, #ef4444, #dc2626);
+            border: 2px solid #b91c1c;
+        }
+
+        .bar-vertical.tie-bar {
+            background: linear-gradient(180deg, #3b82f6, #2563eb);
+            border: 2px solid #1d4ed8;
+        }
+
         @media (max-width: 768px) {
             .nav-pills { flex-direction: column; }
             .step-indicator { flex-direction: column; }
@@ -722,6 +809,9 @@
             .project-header h1 { font-size: 2em; }
             .chart-bars { flex-wrap: wrap; height: auto; }
             .bar-group { margin: 10px; }
+            .chart-grid { flex-wrap: wrap; height: auto; justify-content: center; }
+            .bar-group-vertical { margin: 10px; width: 100px; }
+            .bars-container { height: 200px; }
             .chart-legend { flex-wrap: wrap; gap: 15px; }
             .neural-network { flex-direction: column; padding: 20px 10px; }
             .layer { margin: 10px 0; }
@@ -1115,37 +1205,47 @@ Epsilon 0.9: 84.0% win rate</pre>
                     <h3>📊 Visual Results: Epsilon Parameter Analysis</h3>
                     <div class="chart-container">
                         <div class="chart-title">🎯 Epsilon Impact on Monte Carlo Performance</div>
-                        <div class="bar-chart">
-                            <div class="chart-bars">
-                                <div class="bar-group">
+                        <div class="grouped-bar-chart">
+                            <div class="chart-grid">
+                                <div class="bar-group-vertical">
                                     <div class="bar-label">ε=0.01</div>
-                                    <div class="bar win-bar" style="height: 62%;">62%</div>
-                                    <div class="bar loss-bar" style="height: 16%;">16%</div>
-                                    <div class="bar tie-bar" style="height: 22%;">22%</div>
+                                    <div class="bars-container">
+                                        <div class="bar-vertical win-bar" style="height: 62%;"><span>62%</span></div>
+                                        <div class="bar-vertical loss-bar" style="height: 16%;"><span>16%</span></div>
+                                        <div class="bar-vertical tie-bar" style="height: 22%;"><span>22%</span></div>
+                                    </div>
                                 </div>
-                                <div class="bar-group">
+                                <div class="bar-group-vertical">
                                     <div class="bar-label">ε=0.1</div>
-                                    <div class="bar win-bar" style="height: 86%;">86%</div>
-                                    <div class="bar loss-bar" style="height: 0%;">0%</div>
-                                    <div class="bar tie-bar" style="height: 14%;">14%</div>
+                                    <div class="bars-container">
+                                        <div class="bar-vertical win-bar" style="height: 86%;"><span>86%</span></div>
+                                        <div class="bar-vertical loss-bar" style="height: 0%;"><span>0%</span></div>
+                                        <div class="bar-vertical tie-bar" style="height: 14%;"><span>14%</span></div>
+                                    </div>
                                 </div>
-                                <div class="bar-group breakthrough">
-                                    <div class="bar-label">ε=0.3</div>
-                                    <div class="bar win-bar" style="height: 94%;">94% 🚨</div>
-                                    <div class="bar loss-bar" style="height: 0%;">0%</div>
-                                    <div class="bar tie-bar" style="height: 6%;">6%</div>
+                                <div class="bar-group-vertical breakthrough">
+                                    <div class="bar-label">ε=0.3 🚨</div>
+                                    <div class="bars-container">
+                                        <div class="bar-vertical win-bar" style="height: 94%;"><span>94%</span></div>
+                                        <div class="bar-vertical loss-bar" style="height: 0%;"><span>0%</span></div>
+                                        <div class="bar-vertical tie-bar" style="height: 6%;"><span>6%</span></div>
+                                    </div>
                                 </div>
-                                <div class="bar-group">
+                                <div class="bar-group-vertical">
                                     <div class="bar-label">ε=0.5</div>
-                                    <div class="bar win-bar" style="height: 78%;">78%</div>
-                                    <div class="bar loss-bar" style="height: 8%;">8%</div>
-                                    <div class="bar tie-bar" style="height: 14%;">14%</div>
+                                    <div class="bars-container">
+                                        <div class="bar-vertical win-bar" style="height: 78%;"><span>78%</span></div>
+                                        <div class="bar-vertical loss-bar" style="height: 8%;"><span>8%</span></div>
+                                        <div class="bar-vertical tie-bar" style="height: 14%;"><span>14%</span></div>
+                                    </div>
                                 </div>
-                                <div class="bar-group">
+                                <div class="bar-group-vertical">
                                     <div class="bar-label">ε=0.9</div>
-                                    <div class="bar win-bar" style="height: 84%;">84%</div>
-                                    <div class="bar loss-bar" style="height: 14%;">14%</div>
-                                    <div class="bar tie-bar" style="height: 2%;">2%</div>
+                                    <div class="bars-container">
+                                        <div class="bar-vertical win-bar" style="height: 84%;"><span>84%</span></div>
+                                        <div class="bar-vertical loss-bar" style="height: 14%;"><span>14%</span></div>
+                                        <div class="bar-vertical tie-bar" style="height: 2%;"><span>2%</span></div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="chart-legend">
@@ -1159,38 +1259,53 @@ Epsilon 0.9: 84.0% win rate</pre>
                     <h3>📈 Visual Results: Learning Rate Comparison</h3>
                     <div class="chart-container">
                         <div class="chart-title">⚡ Learning Rate Impact Analysis</div>
-                        <div class="bar-chart">
-                            <div class="chart-bars">
-                                <div class="bar-group">
+                        <div class="grouped-bar-chart">
+                            <div class="chart-grid">
+                                <div class="bar-group-vertical">
                                     <div class="bar-label">α=0.0001</div>
-                                    <div class="bar win-bar" style="height: 68%;">68%</div>
-                                    <div class="bar loss-bar" style="height: 10%;">10%</div>
-                                    <div class="bar tie-bar" style="height: 22%;">22%</div>
+                                    <div class="bars-container">
+                                        <div class="bar-vertical win-bar" style="height: 68%;"><span>68%</span></div>
+                                        <div class="bar-vertical loss-bar" style="height: 10%;"><span>10%</span></div>
+                                        <div class="bar-vertical tie-bar" style="height: 22%;"><span>22%</span></div>
+                                    </div>
                                 </div>
-                                <div class="bar-group optimal">
+                                <div class="bar-group-vertical optimal">
                                     <div class="bar-label">α=0.001</div>
-                                    <div class="bar win-bar" style="height: 80%;">80%</div>
-                                    <div class="bar loss-bar" style="height: 4%;">4%</div>
-                                    <div class="bar tie-bar" style="height: 16%;">16%</div>
+                                    <div class="bars-container">
+                                        <div class="bar-vertical win-bar" style="height: 80%;"><span>80%</span></div>
+                                        <div class="bar-vertical loss-bar" style="height: 4%;"><span>4%</span></div>
+                                        <div class="bar-vertical tie-bar" style="height: 16%;"><span>16%</span></div>
+                                    </div>
                                 </div>
-                                <div class="bar-group optimal">
-                                    <div class="bar-label">α=0.01</div>
-                                    <div class="bar win-bar" style="height: 84%;">84% ⭐</div>
-                                    <div class="bar loss-bar" style="height: 2%;">2%</div>
-                                    <div class="bar tie-bar" style="height: 14%;">14%</div>
+                                <div class="bar-group-vertical breakthrough">
+                                    <div class="bar-label">α=0.01 ⭐</div>
+                                    <div class="bars-container">
+                                        <div class="bar-vertical win-bar" style="height: 84%;"><span>84%</span></div>
+                                        <div class="bar-vertical loss-bar" style="height: 2%;"><span>2%</span></div>
+                                        <div class="bar-vertical tie-bar" style="height: 14%;"><span>14%</span></div>
+                                    </div>
                                 </div>
-                                <div class="bar-group">
+                                <div class="bar-group-vertical">
                                     <div class="bar-label">α=0.1</div>
-                                    <div class="bar win-bar" style="height: 74%;">74%</div>
-                                    <div class="bar loss-bar" style="height: 16%;">16%</div>
-                                    <div class="bar tie-bar" style="height: 10%;">10%</div>
+                                    <div class="bars-container">
+                                        <div class="bar-vertical win-bar" style="height: 74%;"><span>74%</span></div>
+                                        <div class="bar-vertical loss-bar" style="height: 16%;"><span>16%</span></div>
+                                        <div class="bar-vertical tie-bar" style="height: 10%;"><span>10%</span></div>
+                                    </div>
                                 </div>
-                                <div class="bar-group">
+                                <div class="bar-group-vertical">
                                     <div class="bar-label">α=0.5</div>
-                                    <div class="bar win-bar" style="height: 50%;">50%</div>
-                                    <div class="bar loss-bar" style="height: 32%;">32%</div>
-                                    <div class="bar tie-bar" style="height: 18%;">18%</div>
+                                    <div class="bars-container">
+                                        <div class="bar-vertical win-bar" style="height: 50%;"><span>50%</span></div>
+                                        <div class="bar-vertical loss-bar" style="height: 32%;"><span>32%</span></div>
+                                        <div class="bar-vertical tie-bar" style="height: 18%;"><span>18%</span></div>
+                                    </div>
                                 </div>
+                            </div>
+                            <div class="chart-legend">
+                                <span class="legend-item"><span class="legend-color win-color"></span> Win Rate</span>
+                                <span class="legend-item"><span class="legend-color loss-color"></span> Loss Rate</span>
+                                <span class="legend-item"><span class="legend-color tie-color"></span> Tie Rate</span>
                             </div>
                         </div>
                     </div>
@@ -1444,43 +1559,55 @@ Task 2.f - Tie Reward = -1:        44.2% win, 37.4% loss, 18.5% tie</pre>
                     <h3>📊 Visual Results: Q-Learning Parameter Impact</h3>
                     <div class="chart-container">
                         <div class="chart-title">⚡ Q-Learning vs Monte Carlo: The Performance Showdown</div>
-                        <div class="bar-chart">
-                            <div class="chart-bars">
-                                <div class="bar-group">
+                        <div class="grouped-bar-chart">
+                            <div class="chart-grid">
+                                <div class="bar-group-vertical">
                                     <div class="bar-label">Baseline Q-Learning</div>
-                                    <div class="bar win-bar" style="height: 62%;">62%</div>
-                                    <div class="bar loss-bar" style="height: 22%;">22%</div>
-                                    <div class="bar tie-bar" style="height: 16%;">16%</div>
+                                    <div class="bars-container">
+                                        <div class="bar-vertical win-bar" style="height: 62%;"><span>62%</span></div>
+                                        <div class="bar-vertical loss-bar" style="height: 22%;"><span>22%</span></div>
+                                        <div class="bar-vertical tie-bar" style="height: 16%;"><span>16%</span></div>
+                                    </div>
                                 </div>
-                                <div class="bar-group">
+                                <div class="bar-group-vertical">
                                     <div class="bar-label">Higher LR (0.1)</div>
-                                    <div class="bar win-bar" style="height: 62%;">62%</div>
-                                    <div class="bar loss-bar" style="height: 22%;">22%</div>
-                                    <div class="bar tie-bar" style="height: 16%;">16%</div>
+                                    <div class="bars-container">
+                                        <div class="bar-vertical win-bar" style="height: 62%;"><span>62%</span></div>
+                                        <div class="bar-vertical loss-bar" style="height: 22%;"><span>22%</span></div>
+                                        <div class="bar-vertical tie-bar" style="height: 16%;"><span>16%</span></div>
+                                    </div>
                                 </div>
-                                <div class="bar-group">
+                                <div class="bar-group-vertical">
                                     <div class="bar-label">Low Discount (0.5)</div>
-                                    <div class="bar win-bar" style="height: 42%;">42%</div>
-                                    <div class="bar loss-bar" style="height: 34%;">34%</div>
-                                    <div class="bar tie-bar" style="height: 24%;">24%</div>
+                                    <div class="bars-container">
+                                        <div class="bar-vertical win-bar" style="height: 42%;"><span>42%</span></div>
+                                        <div class="bar-vertical loss-bar" style="height: 34%;"><span>34%</span></div>
+                                        <div class="bar-vertical tie-bar" style="height: 24%;"><span>24%</span></div>
+                                    </div>
                                 </div>
-                                <div class="bar-group">
+                                <div class="bar-group-vertical">
                                     <div class="bar-label">Pure Exploration</div>
-                                    <div class="bar win-bar" style="height: 44%;">44%</div>
-                                    <div class="bar loss-bar" style="height: 34%;">34%</div>
-                                    <div class="bar tie-bar" style="height: 22%;">22%</div>
+                                    <div class="bars-container">
+                                        <div class="bar-vertical win-bar" style="height: 44%;"><span>44%</span></div>
+                                        <div class="bar-vertical loss-bar" style="height: 34%;"><span>34%</span></div>
+                                        <div class="bar-vertical tie-bar" style="height: 22%;"><span>22%</span></div>
+                                    </div>
                                 </div>
-                                <div class="bar-group breakthrough">
+                                <div class="bar-group-vertical breakthrough">
                                     <div class="bar-label">Overtraining 🚨</div>
-                                    <div class="bar win-bar" style="height: 37%;">37%</div>
-                                    <div class="bar loss-bar" style="height: 37%;">37%</div>
-                                    <div class="bar tie-bar" style="height: 26%;">26%</div>
+                                    <div class="bars-container">
+                                        <div class="bar-vertical win-bar" style="height: 37%;"><span>37%</span></div>
+                                        <div class="bar-vertical loss-bar" style="height: 37%;"><span>37%</span></div>
+                                        <div class="bar-vertical tie-bar" style="height: 26%;"><span>26%</span></div>
+                                    </div>
                                 </div>
-                                <div class="bar-group optimal">
+                                <div class="bar-group-vertical optimal">
                                     <div class="bar-label">Monte Carlo ⭐</div>
-                                    <div class="bar win-bar" style="height: 94%;">94%</div>
-                                    <div class="bar loss-bar" style="height: 0%;">0%</div>
-                                    <div class="bar tie-bar" style="height: 6%;">6%</div>
+                                    <div class="bars-container">
+                                        <div class="bar-vertical win-bar" style="height: 94%;"><span>94%</span></div>
+                                        <div class="bar-vertical loss-bar" style="height: 0%;"><span>0%</span></div>
+                                        <div class="bar-vertical tie-bar" style="height: 6%;"><span>6%</span></div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="chart-legend">
@@ -1494,23 +1621,31 @@ Task 2.f - Tie Reward = -1:        44.2% win, 37.4% loss, 18.5% tie</pre>
                     <h3>📈 Training Episodes Impact Visualization</h3>
                     <div class="chart-container">
                         <div class="chart-title">🏃‍♂️ The Overtraining Phenomenon</div>
-                        <div class="line-chart">
-                            <div class="performance-trend">
-                                <div style="display: flex; flex-direction: column; align-items: center;">
-                                    <div class="trend-point" style="bottom: 62%; background: #22c55e;"></div>
-                                    <span style="color: #cbd5e1; font-size: 0.8em; margin-top: 5px;">5K Episodes<br>62% Win</span>
+                        <div class="grouped-bar-chart">
+                            <div class="chart-grid">
+                                <div class="bar-group-vertical">
+                                    <div class="bar-label">5K Episodes</div>
+                                    <div class="bars-container">
+                                        <div class="bar-vertical win-bar" style="height: 62%; background: linear-gradient(180deg, #22c55e, #16a34a);"><span>62% Win ✅</span></div>
+                                    </div>
                                 </div>
-                                <div style="display: flex; flex-direction: column; align-items: center;">
-                                    <div class="trend-point" style="bottom: 58%; background: #f59e0b;"></div>
-                                    <span style="color: #cbd5e1; font-size: 0.8em; margin-top: 5px;">20K Episodes<br>58% Win</span>
+                                <div class="bar-group-vertical">
+                                    <div class="bar-label">20K Episodes</div>
+                                    <div class="bars-container">
+                                        <div class="bar-vertical" style="height: 58%; background: linear-gradient(180deg, #f59e0b, #d97706); border: 2px solid #b45309;"><span>58% Win ⚠️</span></div>
+                                    </div>
                                 </div>
-                                <div style="display: flex; flex-direction: column; align-items: center;">
-                                    <div class="trend-point" style="bottom: 45%; background: #ef4444;"></div>
-                                    <span style="color: #cbd5e1; font-size: 0.8em; margin-top: 5px;">50K Episodes<br>37% Win 🚨</span>
+                                <div class="bar-group-vertical breakthrough">
+                                    <div class="bar-label">50K Episodes</div>
+                                    <div class="bars-container">
+                                        <div class="bar-vertical" style="height: 37%; background: linear-gradient(180deg, #ef4444, #dc2626); border: 2px solid #b91c1c;"><span>37% Win 🚨</span></div>
+                                    </div>
                                 </div>
                             </div>
-                            <div style="text-align: center; color: #94a3b8; margin-top: 15px;">
-                                <strong>Lesson:</strong> More training isn't always better - Q-learning can "overthink" and forget good strategies!
+                            <div class="chart-legend" style="justify-content: center;">
+                                <span class="legend-item" style="color: #94a3b8;">
+                                    <strong>Lesson:</strong> More training isn't always better - Q-learning can "overthink" and forget good strategies!
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -2221,25 +2356,31 @@ Training Results:
                     <h3>📊 The Ultimate AI Showdown: Visual Results</h3>
                     <div class="chart-container">
                         <div class="chart-title">🏆 Monte Carlo vs Q-Learning vs DQN: Head-to-Head Comparison</div>
-                        <div class="bar-chart">
-                            <div class="chart-bars">
-                                <div class="bar-group optimal">
+                        <div class="grouped-bar-chart">
+                            <div class="chart-grid">
+                                <div class="bar-group-vertical optimal">
                                     <div class="bar-label">Monte Carlo<br>⭐ CHAMPION</div>
-                                    <div class="bar win-bar" style="height: 94%;">94% 🥇</div>
-                                    <div class="bar loss-bar" style="height: 0%;">0%</div>
-                                    <div class="bar tie-bar" style="height: 6%;">6%</div>
+                                    <div class="bars-container">
+                                        <div class="bar-vertical win-bar" style="height: 94%;"><span>94% 🥇</span></div>
+                                        <div class="bar-vertical loss-bar" style="height: 0%;"><span>0%</span></div>
+                                        <div class="bar-vertical tie-bar" style="height: 6%;"><span>6%</span></div>
+                                    </div>
                                 </div>
-                                <div class="bar-group">
+                                <div class="bar-group-vertical">
                                     <div class="bar-label">Q-Learning<br>🥈 Runner-up</div>
-                                    <div class="bar win-bar" style="height: 62%;">62%</div>
-                                    <div class="bar loss-bar" style="height: 22%;">22%</div>
-                                    <div class="bar tie-bar" style="height: 16%;">16%</div>
+                                    <div class="bars-container">
+                                        <div class="bar-vertical win-bar" style="height: 62%;"><span>62%</span></div>
+                                        <div class="bar-vertical loss-bar" style="height: 22%;"><span>22%</span></div>
+                                        <div class="bar-vertical tie-bar" style="height: 16%;"><span>16%</span></div>
+                                    </div>
                                 </div>
-                                <div class="bar-group">
+                                <div class="bar-group-vertical">
                                     <div class="bar-label">DQN<br>🥉 Most Scalable</div>
-                                    <div class="bar win-bar" style="height: 75%;">Strategic</div>
-                                    <div class="bar loss-bar" style="height: 0%;">Quality</div>
-                                    <div class="bar tie-bar" style="height: 25%;">Gameplay</div>
+                                    <div class="bars-container">
+                                        <div class="bar-vertical win-bar" style="height: 75%;"><span>Strategic</span></div>
+                                        <div class="bar-vertical loss-bar" style="height: 0%;"><span>Quality</span></div>
+                                        <div class="bar-vertical tie-bar" style="height: 25%;"><span>Gameplay</span></div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="chart-legend">
