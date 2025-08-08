@@ -60,6 +60,18 @@ Train AI agents to master Tic Tac Toe using different reinforcement learning app
    ```
 3. Run cells sequentially to train and test the agents
 
+### Quick Web Preview (No setup)
+
+- Open `index.html` in your browser to explore the interactive RL guide with a playable Tic-Tac-Toe game.
+- Features: difficulty selector (Easy/Hard), keyboard navigation, accessible UI, results overview, quiz, and simulator.
+
+### Share/Host the Website
+
+- You can host this project as a static site (no backend required):
+  - GitHub Pages: push to a repository and enable Pages for the `main` branch.
+  - Netlify or Vercel: drag-and-drop the folder or connect the repo.
+  - Any static file server: serve the root directory.
+
 ## 📊 Results
 
 The project demonstrates successful training of RL agents that can:

@@ -6,7 +6,7 @@ This interactive educational experience teaches Reinforcement Learning through t
 
 ## 📚 Learning Paths Overview
 
-### 🚀 Quick Start Guide (`interactive_rl_guide.html`)
+### 🚀 Quick Start Guide (`index.html`)
 **Perfect for beginners and visual learners**
 - **Interactive Tic-Tac-Toe game** - Play against a simple AI
 - **Simple explanations** with real-world analogies 
@@ -29,7 +29,7 @@ This interactive educational experience teaches Reinforcement Learning through t
 
 **Best for:** CS students, developers, researchers, technical professionals
 
-### 📊 Project Documentation (`Project4_Answers.md` & `SIMPLE_EXPLANATION.md`)
+### 📊 Project Documentation (`Project4_Answers.md`)
 **Academic and professional documentation**
 - **Complete experimental results** and statistical analysis
 - **Academic-style research** with methodology
@@ -68,12 +68,10 @@ This interactive educational experience teaches Reinforcement Learning through t
 ### File Structure
 ```
 Project-4-TIC-TAC-TOE-with-RL/
-├── index.html                      # Main landing page
-├── interactive_rl_guide.html       # Beginner-friendly guide
+├── index.html                      # Main landing page and guide
 ├── notebook-interactive-rl.html    # Technical deep dive
-├── Project4_Answers.md            # Academic documentation
-├── SIMPLE_EXPLANATION.md          # Simplified explanations
-└── models/                        # Trained model files
+├── Project4_Answers.md             # Academic documentation
+└── models/                         # Trained model files
 ```
 
 ## 🎯 Learning Objectives
