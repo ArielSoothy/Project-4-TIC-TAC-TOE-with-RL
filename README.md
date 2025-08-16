@@ -6,7 +6,7 @@ This project implements an advanced Tic Tac Toe game using various reinforcement
 
 - `Copy_of_Project_4_TicTacToe_(1) (1).ipynb` - Complete Jupyter notebook with all implementations
 - `task.txt` - Original project requirements and tasks
-- `Project4_Answers.md` - Analysis document showing completed work and TODO items
+- `PROJECT4_COMPLETE_ANSWERS.md` - Analysis document showing completed work and answers
 - `.vscode/` - VS Code settings
 
 ## 🎯 Project Goals
@@ -81,7 +81,7 @@ The project demonstrates successful training of RL agents that can:
 
 ## 🔍 Analysis Status
 
-See `Project4_Answers.md` for detailed breakdown of completed work and remaining analysis tasks.
+See `PROJECT4_COMPLETE_ANSWERS.md` for detailed breakdown of completed work and analysis results.
 
 ## 🤝 Contributing
 

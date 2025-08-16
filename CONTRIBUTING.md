@@ -10,7 +10,7 @@ Thanks for your interest in improving this RL Tic-Tac-Toe project! To keep quali
 - Keep PRs focused and small.
 - Describe the problem and the solution clearly.
 - Include screenshots/GIFs for UI changes.
-- Update docs as needed (`README.md`, `WEBSITE_README.md`).
+- Update docs as needed (`README.md`).
 
 ## Code Style
 - Keep HTML semantic and accessible (labels, roles, `aria-*`).
@@ -28,4 +28,5 @@ Thanks for your interest in improving this RL Tic-Tac-Toe project! To keep quali
 - Do not commit large artifacts; keep model files under 50MB.
 
 Thanks for contributing! 🎯
+
 
