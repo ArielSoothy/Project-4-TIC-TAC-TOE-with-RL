@@ -1,0 +1,94 @@
+/* TicTacToe — project-specific styles on top of portfolio-theme.css */
+
+.hero__pillrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 2.5rem;
+}
+
+/* ---------- Game controls ---------- */
+.game-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1rem 0 1.25rem;
+  align-items: end;
+}
+.game-controls__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+.game-controls__field select {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.55rem 0.85rem;
+  font-family: var(--font);
+  font-size: 0.9rem;
+  min-width: 240px;
+  cursor: pointer;
+  transition: border-color var(--t), box-shadow var(--t);
+}
+.game-controls__field select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+/* ---------- Tic-Tac-Toe board ---------- */
+.tic-tac-toe {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  max-width: 360px;
+  margin: 0 auto;
+  aspect-ratio: 1 / 1;
+}
+.cell {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: clamp(2rem, 6vw, 3rem);
+  font-weight: 800;
+  cursor: pointer;
+  transition: background var(--t), border-color var(--t), transform var(--t);
+  user-select: none;
+  aspect-ratio: 1 / 1;
+}
+.cell:hover {
+  background: var(--surface-3);
+  border-color: var(--border-strong);
+  transform: scale(1.02);
+}
+.cell:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.cell.x { color: var(--accent); }
+.cell.o { color: var(--warning); }
+
+.game-status {
+  margin-top: 1.25rem;
+  text-align: center;
+  font-size: 0.95rem;
+  padding: 0.65rem 1rem;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+.game-status[data-kind="win"]   { color: var(--success); border-color: color-mix(in srgb, var(--success) 30%, transparent); }
+.game-status[data-kind="loss"]  { color: var(--danger);  border-color: color-mix(in srgb, var(--danger) 30%, transparent); }
+.game-status[data-kind="draw"]  { color: var(--info);    border-color: color-mix(in srgb, var(--info) 30%, transparent); }
