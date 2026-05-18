@@ -18,11 +18,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="portfolio-theme.css" />
-  <link rel="stylesheet" href="styles.css?v=2" />
+  <link rel="stylesheet" href="styles.css?v=3" />
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" defer></script>
   <script src="portfolio.js" defer></script>
-  <script src="game.js?v=2" defer></script>
+  <script src="game.js?v=3" defer></script>
 </head>
 <body data-project="tictactoe">
 
@@ -92,28 +92,35 @@
 
       <div class="grid grid--4 reveal">
         <div class="metric metric--good">
-          <div class="metric__label">Q-Learning · best</div>
-          <div class="metric__value">92<span class="metric__unit">%</span></div>
-          <div class="metric__sub">1,000,000 episodes · α=0.1</div>
+          <div class="metric__label">Monte Carlo</div>
+          <div class="metric__value">91<span class="metric__unit">%</span></div>
+          <div class="metric__sub">5,000 episodes · α=0.01, ε=0.1</div>
           <div class="metric__note">vs random · 100 eval games</div>
         </div>
         <div class="metric metric--good">
-          <div class="metric__label">Monte Carlo</div>
-          <div class="metric__value">91<span class="metric__unit">%</span></div>
-          <div class="metric__sub">5,000 episodes</div>
-          <div class="metric__note">vs random · 100 eval games</div>
-        </div>
-        <div class="metric metric--warn">
           <div class="metric__label">DQN</div>
-          <div class="metric__value">60<span class="metric__unit">%</span></div>
-          <div class="metric__sub">100 episodes · undertrained</div>
+          <div class="metric__value">87<span class="metric__unit">%</span></div>
+          <div class="metric__sub">100 episodes · 9→64→32→16→9</div>
+          <div class="metric__note">vs random · 100 eval games</div>
+        </div>
+        <div class="metric metric--good">
+          <div class="metric__label">DDQN</div>
+          <div class="metric__value">82<span class="metric__unit">%</span></div>
+          <div class="metric__sub">100 episodes · target-network split</div>
           <div class="metric__note">vs random · 100 eval games</div>
         </div>
         <div class="metric metric--warn">
-          <div class="metric__label">DDQN</div>
-          <div class="metric__value">60<span class="metric__unit">%</span></div>
-          <div class="metric__sub">100 episodes · undertrained</div>
+          <div class="metric__label">Q-Learning</div>
+          <div class="metric__value">50<span class="metric__unit">%</span></div>
+          <div class="metric__sub">1,000,000 episodes · reward bug</div>
           <div class="metric__note">vs random · 100 eval games</div>
+        </div>
+      </div>
+
+      <div class="disclosure reveal" role="note" style="margin-top: 1rem; border-color: color-mix(in srgb, var(--warning) 40%, transparent);">
+        <span class="disclosure__icon" aria-hidden="true">🔍</span>
+        <div>
+          <strong>Why Q-Learning underperforms despite 1M episodes.</strong> The training cell uses <code>lose_reward = 0</code> — meaning the agent gets no penalty for losing. With nothing to avoid, gradient updates only pull toward winning states, and the value function never learns to defend. The saved Q-table converges to ≈50% W / 37% L / 13% T (notebook's own pie chart, reproduced by re-running the eval over 5×100 games: 45/43/12 mean). Fixing this would mean <code>lose_reward = -1</code> and a retrain. Kept here as-is because it's a real, instructive result.
         </div>
       </div>
 
@@ -126,16 +133,16 @@
 
       <div class="grid grid--3 reveal mt-3">
         <div class="card">
-          <h4 class="card__title">α (learning rate) study</h4>
-          <p class="card__body">Q-Learning was retrained with three learning rates. The default 0.1 gave the best result; α=0.01 slowed convergence to 91%; α=0.5 was unstable.</p>
+          <h4 class="card__title">Monte Carlo · α sweep</h4>
+          <p class="card__body">Four configurations were tried. <code>α=0.001, ε=0.1, 5kep</code> → 69%; <code>α=0.01, ε=0.1, 5kep</code> → <strong>91%</strong> (best); <code>α=0.001, ε=0.3, 5kep</code> → 85%; <code>α=0.001, ε=0.1, 10kep</code> → 87%. Higher LR helped more than more episodes.</p>
         </div>
         <div class="card">
-          <h4 class="card__title">ε-greedy exploration</h4>
-          <p class="card__body">Initial ε=1.0 decaying by 0.995/episode to a floor of 0.01. A flat ε=0.3 variant capped at 85%, confirming the value of annealing.</p>
+          <h4 class="card__title">DQN vs DDQN</h4>
+          <p class="card__body">Both networks share a 9→64→32→16→9 architecture and 32-batch replay. DQN ended at <strong>87% / 13% ties</strong>; DDQN at <strong>82% / 18% ties</strong>. Decoupling action-selection from value-estimation didn't help here — likely because 100 episodes is too short for DDQN's stabilization benefit to matter.</p>
         </div>
         <div class="card">
           <h4 class="card__title">State coverage</h4>
-          <p class="card__body">After 1M episodes, Q-Learning visited 2,776 unique board states out of ~5,000 reachable. The rest are unreached — and the agent has no value estimate for them.</p>
+          <p class="card__body">After 1M episodes, Q-Learning visited 2,776 unique board states; 2,261 have non-zero learned Q-values. Of the unreached states, most are positions that never arise when X opens with a deterministic policy — symmetry canonicalization would compress the table further.</p>
         </div>
       </div>
     </div>
@@ -236,18 +243,18 @@
         <div class="card">
           <h3 class="card__title">✓ Real</h3>
           <ul style="color: var(--text-muted); margin: 0; padding-left: 1.2rem; line-height: 1.8;">
-            <li>All four algorithms have working, correct training loops (verified Bellman update, ε-decay schedule, experience replay for DQN/DDQN).</li>
-            <li>Q-Learning trained for 1,000,000 episodes — the saved file is 175 KB and contains 2,776 unique state-action values.</li>
-            <li>Win rates above are from real evaluation cells.</li>
+            <li>All four algorithms have working training loops with the correct update rules (Bellman for Q-Learning, first-visit MC, experience replay for DQN/DDQN, target-network split for DDQN).</li>
+            <li>Q-Learning trained for 1,000,000 episodes — saved Q-table is 175 KB, holds 2,776 unique states, 2,261 with learned values. The 1M-row training log is preserved alongside it.</li>
+            <li>All win rates above are reproducible from artifacts in <code>models/</code> — re-verified by re-running the eval cell post-hoc.</li>
           </ul>
         </div>
         <div class="card">
           <h3 class="card__title">✗ Needs work</h3>
           <ul style="color: var(--text-muted); margin: 0; padding-left: 1.2rem; line-height: 1.8;">
-            <li><strong>Training opponent = random.</strong> No self-play, no curriculum. The agent is optimal against random, not against humans.</li>
-            <li><strong>DQN/DDQN at 100 episodes is undertrained.</strong> For a meaningful neural-RL result you'd want 10k+.</li>
-            <li><strong>No symmetry canonicalization</strong> — rotated/reflected boards are treated as separate states, inflating the Q-table.</li>
-            <li><strong>The playable demo doesn't use the trained models.</strong> Exporting the Q-table to JSON + writing a JS lookup would close this gap in ~40 lines.</li>
+            <li><strong>Q-Learning reward bug.</strong> <code>lose_reward = 0</code> in the training cell — losing isn't punished. Result: 1M episodes converge to ≈50%, not the 90%+ a healthy setup would reach. Left as-is to surface the lesson.</li>
+            <li><strong>Training opponent = random.</strong> No self-play, no curriculum. Numbers above mean "beats a random move-maker", not "beats a human".</li>
+            <li><strong>No symmetry canonicalization</strong> — rotated/reflected boards are treated as separate states, inflating the Q-table by ~8×.</li>
+            <li><strong>The playable demo below uses Minimax, not the trained models.</strong> Exporting the Q-table to JSON + a JS lookup would close this gap in ~40 lines.</li>
           </ul>
         </div>
       </div>

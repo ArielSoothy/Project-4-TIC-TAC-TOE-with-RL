@@ -183,11 +183,11 @@
     chart = new Chart(el, {
       type: 'bar',
       data: {
-        labels: ['Q-Learning', 'Monte Carlo', 'DQN (100ep)', 'DDQN (100ep)'],
+        labels: ['Monte Carlo', 'DQN (100ep)', 'DDQN (100ep)', 'Q-Learning (1M)'],
         datasets: [{
           label: 'Win % vs random opponent',
-          data: [92, 91, 60, 60],
-          backgroundColor: [p.good, p.good, p.warn, p.warn],
+          data: [91, 87, 82, 50],
+          backgroundColor: [p.good, p.good, p.good, p.warn],
           borderRadius: 6,
           borderSkipped: false,
         }]
